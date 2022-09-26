@@ -7,7 +7,7 @@ import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded'
 import { useNavigate } from 'react-router-dom'
 
 const Record = ({ record }) => {
-  const [cid, name, idPatient, idDoctor, timestamp] = record
+  const [id, name, idPatient, idDoctor, timestamp] = record
   const navigate = useNavigate()
 
   return (
@@ -42,7 +42,7 @@ const Record = ({ record }) => {
             </Box>
           </Grid>
           <Grid item xs={1}>
-            <a href={`https://med-chain.infura-ipfs.io/ipfs/${cid}`} target='_blank' rel='noopener noreferrer'>
+            <a href={`https://chaincare.infura-ipfs.io/ipfs/${id}`} target='_blank' rel='noopener noreferrer'>
               <IconButton>
                 <CloudDownloadRoundedIcon fontSize='large' />
               </IconButton>
