@@ -1,27 +1,28 @@
 const actions = {
-  init: "INIT",
-};
+  init: 'INIT',
+  addDoctor: 'ADD_DOCTOR',
+}
 
 const initialState = {
   artifact: null,
   web3: null,
   accounts: null,
   networkID: null,
-  contract: null
-};
+  contract: null,
+  role: 'unknown',
+  loading: true,
+}
 
 const reducer = (state, action) => {
-  const { type, data } = action;
+  const { type, data } = action
   switch (type) {
     case actions.init:
-      return { ...state, ...data };
+      return { ...state, ...data }
+    case actions.addDoctor:
+      return { state: { ...state, role: 'doctor' } }
     default:
-      throw new Error("Undefined reducer action type");
+      throw new Error('Undefined reducer action type')
   }
-};
+}
 
-export {
-  actions,
-  initialState,
-  reducer
-};
+export { actions, initialState, reducer }

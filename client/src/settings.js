@@ -1,0 +1,1 @@
+export const DEFAULT_WEB3_SERVER = 'ws://127.0.0.1:7545';
