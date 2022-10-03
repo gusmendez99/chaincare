@@ -1,12 +1,11 @@
 // Guards
-import Layout from './components/layouts/Layout'
-import AlertPopup from './components/layouts/AlertPopup'
+import AlertPopup from './components/AlertPopup'
 
 // Pages
 import Home from './pages'
 import Patient from './pages/patient'
 import Doctor from './pages/doctor'
-import HeaderAppBar from './components/layouts/Layout'
+import HeaderAppBar from './components/Layout'
 
 const routes = [
   {
