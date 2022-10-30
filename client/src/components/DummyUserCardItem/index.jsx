@@ -21,7 +21,7 @@ const usePersonStyles = makeStyles(() => ({
     justifyContent: 'space-between'
   },
   personInfo: {
-    marginLeft: '1rem'
+    marginLeft: '1.5rem'
   },
   basetext: {
     whiteSpace: 'nowrap',
