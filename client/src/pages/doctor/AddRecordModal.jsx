@@ -41,8 +41,7 @@ const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
           boxShadow: 24,
           borderRadius: 10,
         }}
-        p={2}
-        pr={6}
+        p={4}
         pb={0}
         position='relative'
       >
@@ -52,9 +51,11 @@ const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
           </IconButton>
         </Box>
         <Box display='flex' flexDirection='column' my={1}>
-          <Typography variant='h4'>Add Record</Typography>
+          <Typography variant='h4'>Agregar nuevo registro</Typography>
           <Box my={2}>
             <DropzoneAreaBase
+              dropzoneText='Adjunta archivos arrástrandolos aquí o selecciona uno'
+              previewText='Registro médico'
               onAdd={fileObjs => handleFileChange(fileObjs[0])}
               onDelete={fileObj => {
                 setFile(null)
@@ -67,7 +68,7 @@ const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
             {file && <Chip label={file.name} onDelete={() => setFile(null)} style={{ fontSize: '12px' }} />}
             <Box flexGrow={1} />
             <CustomButton
-              text='upload'
+              text='Subir'
               handleClick={() => handleUpload(buffer, file.name, patientAddress)}
               disabled={!file || !buffer}
             />

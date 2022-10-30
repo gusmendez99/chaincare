@@ -94,7 +94,7 @@ export default function Header() {
       >
         <div className={classes.container}>
           <h1 className={classes.title}>
-            Welcome to <br />
+            Bienvenido a <br />
             <span className={classes.colorText}>ChainCare</span>
           </h1>
           <Scroll to="portal" smooth={true}>

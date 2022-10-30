@@ -1,13 +1,10 @@
-import { Box, Typography, Backdrop, CircularProgress, Divider } from '@mui/material'
+import { Box, Typography, Backdrop, CircularProgress } from '@mui/material'
 import React from 'react'
-import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded'
-import logo from '../assets/LogoBlueCropped.png'
 import useEth from '../contexts/EthContext/useEth'
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 import CustomButton from '../components/CustomButton'
 import { useNavigate } from 'react-router-dom'
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
-import { grey } from '@mui/material/colors'
 
 import { makeStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
@@ -48,7 +45,7 @@ const Home = () => {
     if (!accounts) {
       return (
         <Typography variant='h5' color='white'>
-          Open your MetaMask wallet to get connected, then refresh this page
+          Abra su billetera MetaMask para conectarse, luego actualice esta página
         </Typography>
       )
     } else {
@@ -56,24 +53,24 @@ const Home = () => {
         return (
           <Box display='flex' flexDirection='column' alignItems='center'>
             <Box mb={2}>
-              <CustomButton text='Doctor Register' handleClick={() => registerDoctor()}>
+              <CustomButton text='Registro de Doctor' handleClick={() => registerDoctor()}>
                 <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
               </CustomButton>
             </Box>
             <Typography variant='h5' color='white'>
-              If you are a patient, ask your doctor to register for you
+              Si eres un paciente, pídale a tu médico que te registre primero
             </Typography>
           </Box>
         )
       } else if (role === 'patient') {
         return (
-          <CustomButton text='Patient Portal' handleClick={() => navigate('/patient')}>
+          <CustomButton text='Portal de Paciente' handleClick={() => navigate('/patient')}>
             <LoginRoundedIcon style={{ color: 'white' }} />
           </CustomButton>
         )
       } else if (role === 'doctor') {
         return (
-          <CustomButton text='Doctor Portal' handleClick={() => navigate('/doctor')}>
+          <CustomButton text='Portal de Doctor' handleClick={() => navigate('/doctor')}>
             <LoginRoundedIcon style={{ color: 'white' }} />
           </CustomButton>
         )
@@ -96,7 +93,7 @@ const Home = () => {
         <ActionSection />
         <Box display='flex' alignItems='center' mt={2}>
           <Typography variant='h5' color='white'>
-            powered by{' '}
+            Prototipo realizado con {' '}
           </Typography>
           <Box mx={1}>
             <img

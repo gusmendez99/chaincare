@@ -33,7 +33,7 @@ contract EHR {
   modifier senderExists {
     require(
       doctors[msg.sender].id == msg.sender || patients[msg.sender].id == msg.sender,
-      "Sender does not exist"
+      "El remitente no existe"
     );
     _;
   }
@@ -41,7 +41,7 @@ contract EHR {
   modifier patientExists(address idPatient) {
     require(
       patients[idPatient].id == idPatient,
-      "Patient does not exist"
+      "El paciente no existe"
     );
     _;
   }
@@ -49,7 +49,7 @@ contract EHR {
   modifier senderIsDoctor {
     require(
       doctors[msg.sender].id == msg.sender,
-      "Sender is not a doctor"
+      "El remitente no es un doctor"
     );
     _;
   }
@@ -58,7 +58,7 @@ contract EHR {
   function addPatient(address _idPatient) public senderIsDoctor {
     require(
       patients[_idPatient].id != _idPatient,
-      "Patient with this ID already exists"
+      "El paciente con este ID ya existe"
     );
     patients[_idPatient].id = _idPatient;
 
@@ -68,7 +68,7 @@ contract EHR {
   function addDoctor() public {
     require(
       doctors[msg.sender].id != msg.sender,
-      "Doctor with this ID already exists"
+      "El doctor con este ID ya existe"
     );
     doctors[msg.sender].id = msg.sender;
 

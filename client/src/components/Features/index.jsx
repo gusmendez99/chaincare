@@ -16,18 +16,20 @@ const useStyles = makeStyles((theme) => ({
 
 const FEATURES = [
   {
-    title: 'Electronic Medical Records (EHR) with Blockchain',
+    title: 'Registro médico electrónico (EHR) con Blockchain',
     description:
-      "Our aim is give patients authority over their medical information by allowing them to share the most complete version of their record with all of the organizations involved in their medical network.",
+      "Nuestro objetivo es otorgar a los pacientes autoridad sobre su información médica al permitirles compartir la versión más completa de su registro con todas las organizaciones involucradas en su red médica.",
     imageUrl: process.env.PUBLIC_URL + '/assets/digital-x-rays.jpeg',
     time: 1500,
+    alt: 'EHR con Blockchain'
   },
   {
-    title: 'Data Science in Healthcare',
+    title: 'Data Science en favor de la salud',
     description:
-      'Also, medical datasets may help in the attempt to make chronic respiratory and cardiovascular diseases prediction at very early stage.',
+      'Además, los conjuntos de datos médicos pueden ayudar en el intento de hacer una predicción de enfermedades respiratorias y cardiovasculares crónicas en una etapa muy temprana, y contribuir a la comunidad científica en la búsqueda hallazgos.',
     imageUrl: process.env.PUBLIC_URL + '/assets/data-scientist.jpeg',
     time: 1500,
+    alt: 'Data Science en favor de la salud'
   },
 ];
 

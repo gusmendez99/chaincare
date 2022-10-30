@@ -1,24 +1,25 @@
-import { Box, Divider, FormControl, Modal, TextField, Typography, Backdrop, CircularProgress } from '@mui/material'
-import React, { useCallback } from 'react'
-import { useState } from 'react'
+import { Grid, Box, FormControl, Modal, TextField, Typography, Backdrop, CircularProgress, IconButton } from '@mui/material'
+import React, { useCallback, useState } from 'react'
 import CustomButton from '../../components/CustomButton'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
+import ListAlt from '@mui/icons-material/ListAlt'
 import useEth from '../../contexts/EthContext/useEth'
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 import useAlert from '../../contexts/AlertContext/useAlert'
 import AddRecordModal from './AddRecordModal'
-import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
 import ipfs from '../../ipfs'
 import Record from '../../components/Record'
+import DummyUserCardItem from '../../components/DummyUserCardItem'
+
 
 const Doctor = () => {
   const {
     state: { contract, accounts, role, loading },
   } = useEth();
-  console.log('BROOO: ', contract, accounts, role, loading)
   const { setAlert } = useAlert()
 
   const [patientExist, setPatientExist] = useState(false)
+  const [isRegisterPatientViewDisplayed, setIsRegisterPatientViewDisplayed] = useState(false);
   const [searchPatientAddress, setSearchPatientAddress] = useState('')
   const [addPatientAddress, setAddPatientAddress] = useState('')
   const [records, setRecords] = useState([])
@@ -27,17 +28,16 @@ const Doctor = () => {
   const searchPatient = async () => {
     try {
       if (!/^(0x)?[0-9a-f]{40}$/i.test(searchPatientAddress)) {
-        setAlert('Please enter a valid wallet address', 'error')
+        setAlert('Ingrese una dirección de billetera válida', 'error')
         return
       }
       const patientExists = await contract.methods.getPatientExists(searchPatientAddress).call({ from: accounts[0] })
       if (patientExists) {
         const records = await contract.methods.getRecords(searchPatientAddress).call({ from: accounts[0] })
-        console.log('records :>> ', records)
         setRecords(records)
         setPatientExist(true)
       } else {
-        setAlert('Patient does not exist', 'error')
+        setAlert('El paciente no se encuentra registrado en el sistema', 'error')
       }
     } catch (err) {
       console.error(err)
@@ -55,7 +55,7 @@ const Doctor = () => {
   const addRecordCallback = useCallback(
     async (buffer, fileName, patientAddress) => {
       if (!patientAddress) {
-        setAlert('Please search for a patient first', 'error')
+        setAlert('Por favor, busca primero al paciente registrado', 'error')
         return
       }
       try {
@@ -63,7 +63,7 @@ const Doctor = () => {
         const ipfsHash = res[0].hash
         if (ipfsHash) {
           await contract.methods.addRecord(ipfsHash, fileName, patientAddress).send({ from: accounts[0] })
-          setAlert('New record uploaded', 'success')
+          setAlert('Nuevo registro médico subido exitosamente', 'success')
           setAddRecord(false)
 
           // refresh records
@@ -71,12 +71,107 @@ const Doctor = () => {
           setRecords(records)
         }
       } catch (err) {
-        setAlert('Record upload failed', 'error')
+        setAlert('Error al subir archivo del registro médico', 'error')
         console.error(err)
       }
     },
     [addPatientAddress, accounts, contract]
   )
+
+  // Views
+  const PatientsListView = () => (
+    <>
+      <Modal open={addRecord} onClose={() => setAddRecord(false)}>
+        <AddRecordModal
+          handleClose={() => setAddRecord(false)}
+          handleUpload={addRecordCallback}
+          patientAddress={searchPatientAddress}
+        />
+      </Modal>
+      <Typography variant='h4'>Búsqueda</Typography>
+      <Box display='flex' alignItems='center' my={1}>
+        <FormControl fullWidth>
+          <TextField
+            variant='outlined'
+            placeholder='Buscar paciente por dirección de billetera'
+            value={searchPatientAddress}
+            onChange={e => setSearchPatientAddress(e.target.value)}
+            InputProps={{ 
+              style: { 
+                fontSize: '15px',
+                borderRadius: '30px'
+              },
+              endAdornment: (
+                <IconButton
+                  style={{
+                    backgroundColor: '#3DBFF2',
+                    margin: '0.75rem 0rem',
+                    padding: '1rem',
+    
+                  }}
+                  aria-label="Buscar registro"
+                  component="label"
+                  onClick={() => searchPatient()}
+                >
+                  <SearchRoundedIcon style={{ color: 'white' }} />
+                </IconButton>
+              )
+            }}
+            InputLabelProps={{ style: { fontSize: '15px' } }}
+            size='small'
+          />
+        </FormControl>
+      </Box>
+
+      {patientExist && (
+        <DummyUserCardItem
+          registersCount={records.length}
+          onAction={() => setAddRecord(true)}
+        />
+      )}
+    
+      {patientExist && records.length === 0 && (
+        <Box display='flex' alignItems='center' justifyContent='center' my={5}>
+          <Typography variant='h5'>Este paciente no cuenta con registros médicos aún</Typography>
+        </Box>
+      )}
+    
+      {patientExist && records.length > 0 && (
+        <Box display='flex' flexDirection='column' mt={4} mb={-2}>
+          <Typography variant='h4' mb={2}>Listado de registros</Typography>
+          {records.map((record, index) => (
+            <Box mb={2}>
+              <Record key={index} record={record} />
+            </Box>
+          ))}
+        </Box>
+      )}
+    </>
+  );
+
+  const RegisterPatientView = () => (
+    <>
+      <Typography variant='h4'>Registro de Pacientes</Typography>
+      <Box display='flex' alignItems='center' my={1}>
+        <FormControl fullWidth>
+          <TextField
+            variant='outlined'
+            placeholder='Registrar paciente por dirección de billetera'
+            value={addPatientAddress}
+            onChange={e => setAddPatientAddress(e.target.value)}
+            InputProps={{ style: { fontSize: '15px' } }}
+            InputLabelProps={{ style: { fontSize: '15px' } }}
+            size='small'
+          />
+        </FormControl>
+        <Box mx={2}>
+          <CustomButton text={'Registrar'} handleClick={() => registerPatient()}>
+            <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
+          </CustomButton>
+        </Box>
+      </Box>
+    </>
+  );
 
   if (loading) {
     return (
@@ -86,97 +181,63 @@ const Doctor = () => {
     )
   } else {
     return (
-      <Box display='flex' justifyContent='center' width='100vw'>
+      <Box display='flex' flexDirection='column' alignItems='center' width='100vw'>
+        <Grid  
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          style={{
+            backgroundColor: '#06283D',
+            color: 'white',
+            padding: '3rem',
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h3"
+              component="p"
+            >
+              Registros Médicos 
+            </Typography>
+          </Box>
+          <IconButton
+            style={{
+              backgroundColor: '#3DBFF2',
+              padding: '1rem',
+
+            }}
+            aria-label="Buscar registro"
+            component="label"
+            onClick={() => setIsRegisterPatientViewDisplayed(!isRegisterPatientViewDisplayed)}
+          >
+            {
+              !isRegisterPatientViewDisplayed 
+                ? <PersonAddAlt1RoundedIcon fontSize='large' style={{ color: 'white' }} />
+                : <ListAlt fontSize='large' style={{ color: 'white' }} />
+            }
+          </IconButton>
+        </Grid>
         <Box width='60%' my={5}>
           {!accounts ? (
             <Box display='flex' justifyContent='center'>
-              <Typography variant='h6'>Open your MetaMask wallet to get connected, then refresh this page</Typography>
+              <Typography variant='h6'>Abra su billetera MetaMask para conectarse, luego actualice esta página</Typography>
             </Box>
           ) : (
             <>
               {role === 'unknown' && (
                 <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>You're not registered, please go to home page</Typography>
+                  <Typography variant='h5'>No estás registrado, por favor ve a la página de inicio</Typography>
                 </Box>
               )}
               {role === 'patient' && (
                 <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>Only doctor can access this page</Typography>
+                  <Typography variant='h5'>Solo los doctores tienen acceso a esta página</Typography>
                 </Box>
               )}
               {role === 'doctor' && (
-                <>
-                  <Modal open={addRecord} onClose={() => setAddRecord(false)}>
-                    <AddRecordModal
-                      handleClose={() => setAddRecord(false)}
-                      handleUpload={addRecordCallback}
-                      patientAddress={searchPatientAddress}
-                    />
-                  </Modal>
-
-                  <Typography variant='h4'>Patient Records</Typography>
-                  <Box display='flex' alignItems='center' my={1}>
-                    <FormControl fullWidth>
-                      <TextField
-                        variant='outlined'
-                        placeholder='Search patient by wallet address'
-                        value={searchPatientAddress}
-                        onChange={e => setSearchPatientAddress(e.target.value)}
-                        InputProps={{ style: { fontSize: '15px' } }}
-                        InputLabelProps={{ style: { fontSize: '15px' } }}
-                        size='small'
-                      />
-                    </FormControl>
-                    <Box mx={2}>
-                      <CustomButton text={'Search'} handleClick={() => searchPatient()}>
-                        <SearchRoundedIcon style={{ color: 'white' }} />
-                      </CustomButton>
-                    </Box>
-                    <CustomButton text={'New Record'} handleClick={() => setAddRecord(true)} disabled={!patientExist}>
-                      <CloudUploadRoundedIcon style={{ color: 'white' }} />
-                    </CustomButton>
-                  </Box>
-
-                  {patientExist && records.length === 0 && (
-                    <Box display='flex' alignItems='center' justifyContent='center' my={5}>
-                      <Typography variant='h5'>No records found</Typography>
-                    </Box>
-                  )}
-
-                  {patientExist && records.length > 0 && (
-                    <Box display='flex' flexDirection='column' mt={3} mb={-2}>
-                      {records.map((record, index) => (
-                        <Box mb={2}>
-                          <Record key={index} record={record} />
-                        </Box>
-                      ))}
-                    </Box>
-                  )}
-
-                  <Box mt={6} mb={4}>
-                    <Divider />
-                  </Box>
-
-                  <Typography variant='h4'>Register Patient</Typography>
-                  <Box display='flex' alignItems='center' my={1}>
-                    <FormControl fullWidth>
-                      <TextField
-                        variant='outlined'
-                        placeholder='Register patient by wallet address'
-                        value={addPatientAddress}
-                        onChange={e => setAddPatientAddress(e.target.value)}
-                        InputProps={{ style: { fontSize: '15px' } }}
-                        InputLabelProps={{ style: { fontSize: '15px' } }}
-                        size='small'
-                      />
-                    </FormControl>
-                    <Box mx={2}>
-                      <CustomButton text={'Register'} handleClick={() => registerPatient()}>
-                        <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
-                      </CustomButton>
-                    </Box>
-                  </Box>
-                </>
+                isRegisterPatientViewDisplayed
+                ? RegisterPatientView()
+                : PatientsListView()
               )}
             </>
           )}

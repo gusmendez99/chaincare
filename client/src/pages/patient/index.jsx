@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, Backdrop, CircularProgress } from '@mui/material'
+import { Grid, Box, Typography, Backdrop, CircularProgress } from '@mui/material'
 import useEth from '../../contexts/EthContext/useEth'
 import Record from '../../components/Record'
+import DummyUserCardItem from '../../components/DummyUserCardItem';
 
 const Patient = () => {
   const {
@@ -33,34 +34,58 @@ const Patient = () => {
     )
   } else {
     return (
-      <Box display='flex' justifyContent='center' width='100vw'>
+      <Box display='flex' flexDirection='column' alignItems='center' width='100vw'>
+        <Grid  
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          style={{
+            backgroundColor: '#06283D',
+            color: 'white',
+            padding: '3rem',
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h3"
+              component="p"
+            >
+              Mis Registros Médicos 
+            </Typography>
+          </Box>
+        </Grid>
         <Box width='60%' my={5}>
           <Backdrop sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }} open={loading}>
             <CircularProgress color='inherit' />
           </Backdrop>
           {!accounts ? (
             <Box display='flex' justifyContent='center'>
-              <Typography variant='h6'>Open your MetaMask wallet to get connected, then refresh this page</Typography>
+              <Typography variant='h6'>Abra su billetera MetaMask para conectarse, luego actualice esta página</Typography>
             </Box>
           ) : (
             <>
               {role === 'unknown' && (
                 <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>You're not registered, please go to home page</Typography>
+                  <Typography variant='h5'>No estás registrado, por favor ve a la página de inicio</Typography>
                 </Box>
               )}
               {role === 'doctor' && (
                 <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>Only patient can access this page</Typography>
+                  <Typography variant='h5'>Solo los pacientes tienen acceso a este portal</Typography>
                 </Box>
               )}
               {role === 'patient' && (
                 <>
-                  <Typography variant='h4'>My Records</Typography>
+                  <Typography variant='h4'>Mi Perfil</Typography>
+                  <DummyUserCardItem
+                    isPatient
+                    registersCount={records.length}
+                  />
+                  <Typography variant='h4' mt={4}>Listado de registros</Typography>
 
                   {records.length === 0 && (
                     <Box display='flex' alignItems='center' justifyContent='center' my={5}>
-                      <Typography variant='h5'>No records found</Typography>
+                      <Typography variant='h5'>Aún no hay registros creados en la plataforma</Typography>
                     </Box>
                   )}
 
