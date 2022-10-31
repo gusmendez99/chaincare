@@ -15,6 +15,10 @@ contract EHR {
     address id;
   }
 
+  struct DataScientist {
+    address id;
+  }
+
   struct Patient {
     address id;
     Record[] records;
@@ -24,15 +28,19 @@ contract EHR {
   // Mappings & Events
   mapping (address => Patient) public patients;
   mapping (address => Doctor) public doctors;
+  mapping (address => DataScientist) public datascientists;
 
   event RecordAdded(string id, address idPatient, address idDoctor); 
   event PatientAdded(address idPatient);
   event DoctorAdded(address idDoctor);
+  event DataScientistAdded(address idDataScientist);
 
   // Modifiers
   modifier senderExists {
     require(
-      doctors[msg.sender].id == msg.sender || patients[msg.sender].id == msg.sender,
+      doctors[msg.sender].id == msg.sender
+      || patients[msg.sender].id == msg.sender 
+      || datascientists[msg.sender].id == msg.sender,
       "El remitente no existe"
     );
     _;
@@ -50,6 +58,22 @@ contract EHR {
     require(
       doctors[msg.sender].id == msg.sender,
       "El remitente no es un doctor"
+    );
+    _;
+  }
+
+  modifier senderIsDataScientist {
+    require(
+      datascientists[msg.sender].id == msg.sender,
+      "El remitente no es un cientifico de datos"
+    );
+    _;
+  }
+
+  modifier senderAllowedToReadRecords {
+    require(
+      doctors[msg.sender].id == msg.sender || datascientists[msg.sender].id == msg.sender,
+      "El remitente no tiene los suficientes permisos para leer registros medicos"
     );
     _;
   }
@@ -75,6 +99,16 @@ contract EHR {
     emit DoctorAdded(msg.sender);
   }
 
+  function addDataScientist() public {
+    require(
+      datascientists[msg.sender].id != msg.sender,
+      "El cientifico de datos con este ID ya existe"
+    );
+    datascientists[msg.sender].id = msg.sender;
+
+    emit DataScientistAdded(msg.sender);
+  }
+
   function addRecord(string memory _id, string memory _filename, address _idPatient) public senderIsDoctor patientExists(_idPatient) {
     Record memory record = Record(_id, _filename, _idPatient, msg.sender, block.timestamp);
     patients[_idPatient].records.push(record);
@@ -91,12 +125,14 @@ contract EHR {
       return "doctor";
     } else if (patients[msg.sender].id == msg.sender) {
       return "patient";
+    } else if (datascientists[msg.sender].id == msg.sender) {
+      return "datascientist";
     } else {
       return "unknown";
     }
   }
 
-  function getPatientExists(address _idPatient) public view senderIsDoctor returns (bool) {
+  function getPatientExists(address _idPatient) public view senderAllowedToReadRecords returns (bool) {
     return patients[_idPatient].id == _idPatient;
   }
 } 

@@ -137,7 +137,7 @@ const Doctor = () => {
       )}
     
       {patientExist && records.length > 0 && (
-        <Box display='flex' flexDirection='column' mt={4} mb={-2}>
+        <Box display='flex' flexDirection='column' mt={6} mb={-2}>
           <Typography variant='h4' mb={2}>Listado de registros</Typography>
           {records.map((record, index) => (
             <Box mb={2}>
@@ -196,6 +196,7 @@ const Doctor = () => {
             <Typography
               variant="h3"
               component="p"
+              fontFamily={'Nunito'}
             >
               Registros Médicos 
             </Typography>
@@ -229,7 +230,7 @@ const Doctor = () => {
                   <Typography variant='h5'>No estás registrado, por favor ve a la página de inicio</Typography>
                 </Box>
               )}
-              {role === 'patient' && (
+              {(role === 'patient' || role === 'datascientist') && (
                 <Box display='flex' justifyContent='center'>
                   <Typography variant='h5'>Solo los doctores tienen acceso a esta página</Typography>
                 </Box>

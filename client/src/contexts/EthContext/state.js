@@ -1,6 +1,7 @@
 const actions = {
   init: 'INIT',
   addDoctor: 'ADD_DOCTOR',
+  addDataScientist: 'ADD_DATASCIENTIST',
 }
 
 const initialState = {
@@ -20,6 +21,8 @@ const reducer = (state, action) => {
       return { ...state, ...data }
     case actions.addDoctor:
       return { state: { ...state, role: 'doctor' } }
+    case actions.addDataScientist:
+      return { state: { ...state, role: 'datascientist' } }
     default:
       throw new Error('Undefined reducer action type')
   }

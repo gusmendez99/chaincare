@@ -5,6 +5,7 @@ import AlertPopup from './components/AlertPopup'
 import Home from './pages'
 import Patient from './pages/patient'
 import Doctor from './pages/doctor'
+import DataScientist from './pages/datascientist'
 import HeaderAppBar from './components/Layout'
 
 const routes = [
@@ -37,6 +38,16 @@ const routes = [
             <HeaderAppBar />
             <AlertPopup />
             <Doctor />
+          </>
+        ),
+      },
+      {
+        path: 'datascientist',
+        element: (
+          <>
+            <HeaderAppBar />
+            <AlertPopup />
+            <DataScientist />
           </>
         ),
       },

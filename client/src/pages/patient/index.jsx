@@ -49,6 +49,7 @@ const Patient = () => {
             <Typography
               variant="h3"
               component="p"
+              fontFamily={'Nunito'}
             >
               Mis Registros Médicos 
             </Typography>
@@ -69,7 +70,7 @@ const Patient = () => {
                   <Typography variant='h5'>No estás registrado, por favor ve a la página de inicio</Typography>
                 </Box>
               )}
-              {role === 'doctor' && (
+              {(role === 'doctor' || role === 'datascientist') && (
                 <Box display='flex' justifyContent='center'>
                   <Typography variant='h5'>Solo los pacientes tienen acceso a este portal</Typography>
                 </Box>
@@ -81,7 +82,7 @@ const Patient = () => {
                     isPatient
                     registersCount={records.length}
                   />
-                  <Typography variant='h4' mt={4}>Listado de registros</Typography>
+                  <Typography variant='h4' mt={6}>Listado de registros</Typography>
 
                   {records.length === 0 && (
                     <Box display='flex' alignItems='center' justifyContent='center' my={5}>

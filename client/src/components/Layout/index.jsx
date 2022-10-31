@@ -11,13 +11,16 @@ const HeaderAppBar = () => {
   } = useEth()
 
   const getRoleName = role => {
-    if (role === 'patient') {
-      return "Paciente";
-    } else if (role === 'doctor') {
-      return "Doctor";
+    switch(role) {
+      case 'patient':
+        return "Paciente";
+      case 'doctor':
+        return 'Doctor';
+      case 'datascientist':
+        return 'Científico de Datos'
+      default:
+        return 'Usuario invitado'
     }
-    
-    return 'Usuario invitado'
   } 
 
   return (
