@@ -64,7 +64,7 @@ const Home = () => {
       if (role === 'unknown') {
         return (
           <Box display='flex' flexDirection='column' alignItems='center'>
-            <Typography variant='h5' color='white'>
+            <Typography variant='h5' color='white' pb={6}>
               Regístrate en nuestra plataforma
             </Typography>
             <Box mb={2}>
