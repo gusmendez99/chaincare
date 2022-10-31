@@ -2,7 +2,49 @@
 
 This box comes with everything you need to start using Truffle to write, compile, test, and deploy smart contracts, and interact with them from a React app.
 
-## Installation
+## App Demo
+
+### Home
+
+<img src="https://github.com/gusmendez99/chaincare/blob/main/images/home.png?raw=true" width="500"/>
+
+### Doctor Dashboard
+
+<img src="https://github.com/gusmendez99/chaincare/blob/main/images/register-patient.png?raw=true" width="500"/>
+
+<img src="https://github.com/gusmendez99/chaincare/blob/main/images/doctor-dashboard.png?raw=true" width="500"/>
+
+<img src="https://github.com/gusmendez99/chaincare/blob/main/images/uploaded.png?raw=true" width="500"/>
+
+### Patient Dashboard
+
+<img src="https://github.com/gusmendez99/chaincare/blob/main/images/patient-dashboard.png?raw=true" width="500"/>
+
+### Data Scientist Dashboard
+
+<img src="https://github.com/gusmendez99/chaincare/blob/main/images/datascientist-dashboard.png?raw=true" width="500"/>
+
+
+## Setup
+
+1. Config Ganache & Infura IPFS
+2. Run the `migrate` command to compile & migrate ETH contract
+
+```sh
+# Install Truffle globally and run `truffle migrate`
+$ npm install -g truffle
+$ truffle migrate
+```
+
+3. Run React client from `client` folder 
+```sh
+# Do not forget to install dependencies first
+$ cd client
+$ yarn install
+$ yarn start
+```
+
+## Installation (From Scratch, skip this)
 
 First ensure you are in an empty directory.
 
